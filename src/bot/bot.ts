@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "path";
 import { Client, Collection, Intents } from 'discord.js';
 
-const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
+const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
 // @ts-ignore
 client.commands = new Collection();
 const commandFiles = fs.readdirSync(path.join(__dirname, "commands")).filter(file => file.endsWith(".js"));
@@ -26,6 +26,15 @@ client.once('ready', () => {
         } catch(error) {
             console.error(error);
             await interaction.reply({ content: "There was an error executing this command", ephemeral: true });
+        }
+    })
+
+    client.on('messageCreate', async interaction => {
+        if (interaction.author.bot) return;
+        if (interaction.content.includes("WebbieBot")) {
+            interaction.reply("shou?")
+        } else if (interaction.content === "deez") {
+            interaction.channel.send("nuts")
         }
     })
 })
