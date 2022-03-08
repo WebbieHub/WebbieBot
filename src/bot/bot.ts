@@ -1,6 +1,9 @@
 import fs from "node:fs";
 import path from "path";
 import { Client, Collection, Intents } from 'discord.js';
+import { getMessageScore, getUserMultiplier } from "./xp";
+import axios from "axios";
+const host = process.env.HOST || "http://localhost:5000"
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
 // @ts-ignore
@@ -31,10 +34,19 @@ client.once('ready', () => {
 
     client.on('messageCreate', async interaction => {
         if (interaction.author.bot) return;
-        if (interaction.content.includes("WebbieBot")) {
-            interaction.reply("shou?")
-        } else if (interaction.content === "deez") {
+        if (interaction.content === "deez") {
             interaction.channel.send("nuts")
+        }
+        const userId = interaction.author.id;
+        const response = await axios.get(`${host}/api/user/${userId}`);
+        if (!response.data.user) {
+            const resonse2 = await axios.post(`${host}/api/user/${userId}`);
+            interaction.channel.send(`<@${userId}> I've made an entry for you in the DB!`);
+        } else {
+            // add xp based on user multiplier and message type
+            const xp = (await getMessageScore(interaction)) * getUserMultiplier(response.data.user);
+            const res = await axios.patch(`${host}/api/user/${userId}/${xp}`);
+            interaction.channel.send(`<@${userId}> I found you in the DB, you had ${response.data.user.xp} and I awarded ${xp}xp. Keep up the good work :)`);
         }
     })
 })
