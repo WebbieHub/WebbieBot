@@ -32,8 +32,8 @@ router.get("/user/:userId", async (req: Request, res: Response, next: NextFuncti
 
 router.patch("/user/:userId/:xp", async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const user = await userService.addXp(req.params.userId, parseFloat(req.params.xp));
-        res.send({ user });
+        const levelUp = await userService.addXp(req.params.userId, parseFloat(req.params.xp));
+        res.send({ levelUp });
     } catch (e) {
         console.error(e);
         res.status(500).send("Something went wrong");

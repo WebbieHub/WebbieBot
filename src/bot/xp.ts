@@ -50,3 +50,11 @@ export async function getMessageScore(interaction: Message<boolean>) {
     }
     return xpMap.message;
 }
+
+/**
+ * Get the level for a given total xp value
+ * @param xp a user's total xp
+ */
+export function getLevel(xp: number) {
+    return Math.ceil(Math.log(xp));
+}

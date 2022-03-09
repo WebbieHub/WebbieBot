@@ -1,4 +1,5 @@
 import { MongoClient, Collection } from "mongodb";
+import { getLevel } from "../bot/xp";
 
 // user actions
 export interface User {
@@ -35,8 +36,19 @@ export default class UserService {
         return await this.userCol.findOne({ userId });
     }
 
-    async addXp(userId: string, xp: number) {
+    /**
+     * Adds xp to user and checks for a levelup
+     * @param userId id of the user to add to
+     * @param xp amount of xp to add
+     * @returns true if level up occurred, false otherwise
+     */
+    async addXp(userId: string, xp: number): Promise<boolean> {
         // TODO get xp and add and check/update level
-        return await this.userCol.findOneAndUpdate({ userId }, { $inc: { xp } })
+        const { value: user } = await this.userCol.findOneAndUpdate({ userId }, { $inc: { xp } })
+        if (user && getLevel(user.xp) !== user.level) {
+            await this.userCol.findOneAndUpdate({ userId }, {$set: {level: getLevel(user.xp)}});
+            return true
+        }
+        return false
     }
 }
