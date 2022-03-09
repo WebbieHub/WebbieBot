@@ -3,6 +3,7 @@ import path from "path";
 import { Client, Collection, Intents } from 'discord.js';
 import { getLevel, getMessageScore, getUserMultiplier } from "./xp";
 import axios from "axios";
+import { getMessageType, isMilestoneStreak } from "../misc";
 const host = process.env.HOST || "http://localhost:5000"
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
@@ -48,6 +49,15 @@ client.once('ready', () => {
             const res = await axios.patch(`${host}/api/user/${userId}/${xp}`);
             if (res.data.levelUp === true) {
                 interaction.channel.send(`:star2: **LEVEL UP** :star2: \n <@${userId}> has reached level ${getLevel(response.data.user.xp + xp)}`)
+            }
+            // increase streak if appropriate
+            const type = await getMessageType(interaction);
+            if (type === "standup") {
+                // add to streak and check for milestone
+                const result = await axios.patch(`${host}/api/user/${userId}/standup`);
+                if (isMilestoneStreak(result.data.streak)) {
+                    interaction.channel.send(`:fire: **Congrats** to <@${userId}> for a ${result.data.streak} day streak :fire:`);
+                }
             }
         }
     })

@@ -40,4 +40,14 @@ router.patch("/user/:userId/:xp", async (req: Request, res: Response, next: Next
     }
 })
 
+router.patch("/user/:userId/standup", async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const streak = await userService.didStandup(req.params.userId);
+        res.send({ streak });
+    } catch (e) {
+        console.error(e);
+        res.status(500).send("Something went wrong");
+    }
+})
+
 export default router;

@@ -51,4 +51,9 @@ export default class UserService {
         }
         return false
     }
+
+    async didStandup(userId: string) {
+        const { value: user } = await this.userCol.findOneAndUpdate({ userId }, { $inc: { streak: 1 }});
+        return user?.streak;
+    }
 }

@@ -1,14 +1,15 @@
 import { Interaction, Message, MessageInteraction } from "discord.js";
 import { User } from "../db/user"
+import { getMessageType, messageType } from "../misc";
 
 export const xpMap = {
     standup: 15, // first message of calendar day in daily standup channel
     challenge: 5, // posted a message in challenges chat
-    giveFeedback: 5, // reponded to someone in feedback channel
+    feedback: 5, // reponded to someone in feedback channel
     // replyToPing: 4, // respond to being pinged -- not sure how to do this yet
     reply: 2, // responded to someone
     message: 1, // any message seen by WebbieBot
-    // we will manually add points (15 rn) for 
+    // we will manually add points (15 rn) for attending friday events
 }
 
 /**
@@ -23,32 +24,13 @@ export function getUserMultiplier(user: User) {
     return 1 + streakMultiplier + participateMultiplier + winMultiplier;
 }
 
+/**
+ * Get xp based on a message type
+ * @param interaction the message sent
+ * @returns the base xp (no multiplier) of the message type
+ */
 export async function getMessageScore(interaction: Message<boolean>) {
-    if (interaction.channelId === process.env.STANDUP_ID) {
-        // check if its, first daily standup, otherwise process as usual
-        const messages = await interaction.channel.messages.fetch({ limit: 100 });
-        let firstToday = true;
-        for (const message of messages) {
-            if (message[1].createdAt.getDate() === (new Date()).getDate()) {
-                firstToday = false;
-                break;
-            }
-        }
-
-        if (firstToday) {
-            return xpMap.standup;
-        }
-    }
-    // otherwise, check other types of messages
-    if (interaction.channelId === process.env.CHALLENGE_ID) {
-        // post in challenges channel
-        return xpMap.challenge;
-    } else if (interaction.channelId === process.env.FEEDBACK_ID && interaction.type === "REPLY") {
-        return xpMap.giveFeedback;
-    } else if (interaction.type === "REPLY") {
-        return xpMap.reply;
-    }
-    return xpMap.message;
+    return xpMap[(await getMessageType(interaction))];
 }
 
 /**
@@ -56,5 +38,5 @@ export async function getMessageScore(interaction: Message<boolean>) {
  * @param xp a user's total xp
  */
 export function getLevel(xp: number) {
-    return Math.ceil(Math.log(xp));
+    return Math.ceil(Math.log(xp) / 2);
 }
