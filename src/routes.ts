@@ -12,8 +12,8 @@ router.get("/ping", (req: Request, res: Response, next: NextFunction) => {
 
 router.post("/user/:userId", async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const result = await userService.createUser(req.params.userId);
-        res.send({ result });
+        const user = await userService.createUser(req.params.userId);
+        res.send({ user });
     } catch (e) {
         console.error(e);
         res.status(500).send("Something went wrong")
@@ -30,20 +30,22 @@ router.get("/user/:userId", async (req: Request, res: Response, next: NextFuncti
     }
 })
 
-router.patch("/user/:userId/:xp", async (req: Request, res: Response, next: NextFunction) => {
+
+router.patch("/user/:userId/standup", async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const levelUp = await userService.addXp(req.params.userId, parseFloat(req.params.xp));
-        res.send({ levelUp });
+        const streak = await userService.didStandup(req.params.userId);
+        res.send({ streak });
     } catch (e) {
         console.error(e);
         res.status(500).send("Something went wrong");
     }
 })
 
-router.patch("/user/:userId/standup", async (req: Request, res: Response, next: NextFunction) => {
+router.patch("/user/:userId/:xp", async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const streak = await userService.didStandup(req.params.userId);
-        res.send({ streak });
+        console.log(req.params.xp, parseFloat(req.params.xp))
+        const levelUp = await userService.addXp(req.params.userId, parseFloat(req.params.xp));
+        res.send({ levelUp });
     } catch (e) {
         console.error(e);
         res.status(500).send("Something went wrong");

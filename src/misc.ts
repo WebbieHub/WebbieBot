@@ -22,7 +22,11 @@ export async function getMessageType(interaction: Message<boolean>): Promise<mes
         const messages = await interaction.channel.messages.fetch({ limit: 100 });
         let firstToday = true;
         for (const message of messages) {
-            if (message[1].createdAt.getDate() === (new Date()).getDate() && message[1].author.id === interaction.author.id) {
+            if (
+                message[1].createdAt.getDate() === (new Date()).getDate()
+                && message[1].author.id === interaction.author.id
+                && message[1].id !== interaction.id
+            ) {
                 firstToday = false;
                 break;
             }

@@ -38,5 +38,5 @@ export async function getMessageScore(interaction: Message<boolean>) {
  * @param xp a user's total xp
  */
 export function getLevel(xp: number) {
-    return Math.ceil(Math.log(xp) / 2);
+    return xp === 0 ? 0 : Math.ceil(Math.log(xp) / 2);
 }

@@ -22,14 +22,19 @@ export default class UserService {
     }
 
     async createUser(userId: string) {
-        return await this.userCol.insertOne({
+        const user: User = {
             userId,
             xp: 0,
             level: 0,
             streak: 0,
             participated: [],
             won: [],
-        });
+        };
+        const result = await this.userCol.insertOne(user);
+        if (result.acknowledged) {
+            return user;
+        }
+        return null;
     }
 
     async getUserById(userId: string) {
