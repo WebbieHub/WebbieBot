@@ -13,3 +13,6 @@ Discord Bot for the WebbieHub Community
 *deploy-commands.ts*
 1. make your changes in *src* folder
 
+## Contribution Guidelines
+We will be trying [semantic messages](https://gist.github.com/joshbuchea/6f47e86d2510bce28f8e7f42ae84c716) for issues and commits. More contribution guidelines coming soon closer to v1 release
+
