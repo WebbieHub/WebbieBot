@@ -47,7 +47,6 @@ client.once('ready', () => {
         
         // add xp based on user multiplier and message type
         const xp = parseFloat((await getMessageScore(interaction) * getUserMultiplier(response.data.user)).toFixed(2));
-        console.log("whats NAN???", await getMessageScore(interaction), getUserMultiplier(response.data.user));
         const res = await axios.patch(`${host}/api/user/${userId}/${xp}`);
         if (res.data.levelUp === true) {
             interaction.channel.send(`:star2: **LEVEL UP** :star2: \n <@${userId}> has reached level ${getLevel(response.data.user.xp + xp)}`)
@@ -55,11 +54,15 @@ client.once('ready', () => {
         // increase streak if appropriate
         const type = await getMessageType(interaction);
         if (type === "standup") {
+            // reset if needed
+            await axios.get(`${host}/api/user/${userId}/checkResetStreak`);
             // add to streak and check for milestone
             interaction.reply("acknowledging this as a standup")
             const result = await axios.patch(`${host}/api/user/${userId}/standup`);
-            if (isMilestoneStreak(result.data.streak)) {
-                interaction.channel.send(`:fire: **Congrats** to <@${userId}> for reaching a **${result.data.streak} day** streak :fire:`);
+            if (isMilestoneStreak(result.data.streak + 1)) {
+                interaction.channel.send(`:fire: **Congrats** to <@${userId}> for reaching a **${result.data.streak + 1} day** streak :fire:`);
+            } else {
+                interaction.channel.send(`:fire: <@${userId}> has started a new streak. **Keep it up!** :fire:`)
             }
         } else if (interaction.channelId === process.env.STANDUP_ID) {
             interaction.reply("This message is in the standup channel, but is not your first one today..")

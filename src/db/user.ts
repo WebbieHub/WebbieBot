@@ -1,4 +1,4 @@
-import { MongoClient, Collection } from "mongodb";
+import { MongoClient, Collection, ObjectId } from "mongodb";
 import { getLevel } from "../bot/xp";
 
 // user actions
@@ -9,6 +9,7 @@ export interface User {
     streak: number,
     participated: string[],
     won: string[],
+    lastStandup?: Date,
 }
 
 export interface UserDB extends User {
@@ -58,7 +59,15 @@ export default class UserService {
     }
 
     async didStandup(userId: string) {
-        const { value: user } = await this.userCol.findOneAndUpdate({ userId }, { $inc: { streak: 1 }});
+        const { value: user } = await this.userCol.findOneAndUpdate({ userId }, { $inc: { streak: 1 }, $set: { lastStandup: new Date() }});
         return user?.streak;
+    }
+
+    async checkResetStreak(userId: string) {
+        const user = await this.userCol.findOne({ userId });
+        if (user?.lastStandup?.getDate() || (new Date(-8640000000000000)).getDate() < (new Date()).getDate() - 1) {
+            // reset streak
+            await this.userCol.findOneAndUpdate({ userId }, { $set: { streak: 0 } });
+        }
     }
 }

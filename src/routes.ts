@@ -41,9 +41,18 @@ router.patch("/user/:userId/standup", async (req: Request, res: Response, next: 
     }
 })
 
+router.get("/user/:userId/checkResetStreak", async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        await userService.checkResetStreak(req.params.userId);
+        res.send({ message: "checked" });
+    } catch (e) {
+        console.error(e);
+        res.status(500).send("Something went wrong");
+    }
+})
+
 router.patch("/user/:userId/:xp", async (req: Request, res: Response, next: NextFunction) => {
     try {
-        console.log(req.params.xp, parseFloat(req.params.xp))
         const levelUp = await userService.addXp(req.params.userId, parseFloat(req.params.xp));
         res.send({ levelUp });
     } catch (e) {
@@ -51,5 +60,6 @@ router.patch("/user/:userId/:xp", async (req: Request, res: Response, next: Next
         res.status(500).send("Something went wrong");
     }
 })
+
 
 export default router;
