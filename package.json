@@ -6,15 +6,20 @@
   "author": "Julien <jbertazzolambert@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "nodemon -w ./src -e \"js ts\" --exec \"yarn build && node build/index.js\"",
+    "start": "concurrently \"yarn run dev-bot\" \"yarn run dev-site\"",
     "build": "tsc",
     "run": "node build/index.js",
     "clean": "rm -rf build/**/*",
-    "deploy-cmds": "node build/bot/deploy-commands"
+    "deploy-cmds": "node build/bot/deploy-commands",
+    "build-css": "npx tailwindcss -i ./website/css/src/index.css -o ./website/css/dist/index.css",
+    "dev-site": "npx tailwindcss -i ./website/css/src/index.css -o ./website/css/dist/index.css --watch",
+    "dev-bot": "nodemon -w ./src -e \"js ts html\" --exec \"yarn build && node build/index.js\""
   },
   "devDependencies": {
     "@types/express": "^4.17.13",
+    "concurrently": "^7.0.0",
     "nodemon": "^2.0.15",
+    "tailwindcss": "^3.0.23",
     "typescript": "^4.6.2"
   },
   "dependencies": {
