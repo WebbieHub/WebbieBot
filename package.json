@@ -6,9 +6,9 @@
   "author": "Julien <jbertazzolambert@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "concurrently \"yarn run dev-bot\" \"yarn run dev-site\"",
+    "start": "node build/index.js",
+    "dev": "concurrently \"yarn run dev-bot\" \"yarn run dev-site\"",
     "build-bot": "tsc",
-    "run": "node build/index.js",
     "clean": "rm -rf build/**/*",
     "deploy-cmds": "node build/bot/deploy-commands",
     "build-css": "npx tailwindcss -i ./website/css/src/index.css -o ./website/css/dist/index.css",
