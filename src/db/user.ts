@@ -70,4 +70,8 @@ export default class UserService {
             await this.userCol.findOneAndUpdate({ userId }, { $set: { streak: 0 } });
         }
     }
+
+    async getAll() {
+        return await this.userCol.find().toArray()
+    }
 }

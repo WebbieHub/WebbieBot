@@ -9,21 +9,17 @@ import path from "path";
 
 app.use("/api", router);
 
-app.use(express.static(path.join(__dirname, "../website")))
+app.use(express.static(path.join(__dirname, "../website/build")))
 
-app.get('/invite', (req: Request, res: Response, next: NextFunction) => {
+app.get('/invite', (_req: Request, res: Response, _next: NextFunction) => {
     res.status(301).redirect(`https://discord.com/api/oauth2/authorize?client_id=${process.env.CLIENT_ID}&permissions=2415987776&scope=bot%20applications.commands`);
 })
 
-app.get('/', (req: Request, res: Response, next: NextFunction) => {
-    res.sendFile(path.join(__dirname, "../website/index.html"));
+app.get('*', (req: Request, res: Response, next: NextFunction) => {
+    res.sendFile(path.join(__dirname, "../website/build/index.html"));
 })
 
-app.get('/admin', (req: Request, res: Response, next: NextFunction) => {
-    res.sendFile(path.join(__dirname, "../website/admin.html"));
-})
-
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 8080;
 app.listen(port, () => {
     console.log(`listening on ${port}`);
 })

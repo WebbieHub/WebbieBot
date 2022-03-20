@@ -10,13 +10,23 @@ router.get("/ping", (req: Request, res: Response, next: NextFunction) => {
     res.send({ message: "pong" })
 })
 
+router.get('/user', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const users = await userService.getAll();
+        res.send({ users });
+    } catch(e) {
+        console.error(e);
+        res.status(500).send("Something went wrong");
+    }
+})
+
 router.post("/user/:userId", async (req: Request, res: Response, next: NextFunction) => {
     try {
         const user = await userService.createUser(req.params.userId);
         res.send({ user });
     } catch (e) {
         console.error(e);
-        res.status(500).send("Something went wrong")
+        res.status(500).send("Something went wrong");
     }
 })
 
