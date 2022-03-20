@@ -13,7 +13,10 @@
     "deploy-cmds": "node build/bot/deploy-commands",
     "dev": "concurrently \"yarn run dev-bot\" \"yarn --cwd website watch\"",
     "dev-site": "yarn --cwd website start",
-    "dev-bot": "nodemon -w ./src -e \"js ts html\" --exec \"yarn build && node build/index.js\""
+    "dev-bot": "nodemon -w ./src -e \"js ts html\" --exec \"yarn build && node build/index.js\"",
+    "install": "yarn --cwd website install",
+    "postinstall": "yarn build",
+    "heroku-postbuild": "yarn --cwd website build"
   },
   "devDependencies": {
     "@types/express": "^4.17.13",
