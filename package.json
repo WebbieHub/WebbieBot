@@ -11,7 +11,7 @@
     "build-bot": "tsc",
     "clean": "rm -rf build/**/*",
     "deploy-cmds": "node build/bot/deploy-commands",
-    "dev": "concurrently \"yarn run dev-bot\" \"yarn --cwd website start\"",
+    "dev": "concurrently \"yarn run dev-bot\" \"yarn --cwd website watch\"",
     "dev-site": "yarn --cwd website start",
     "dev-bot": "nodemon -w ./src -e \"js ts html\" --exec \"yarn build && node build/index.js\""
   },
