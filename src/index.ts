@@ -7,6 +7,8 @@ import "./bot/bot";
 import router from "./routes";
 import path from "path";
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }))
 app.use("/api", router);
 
 app.use(express.static(path.join(__dirname, "../website/build")))
