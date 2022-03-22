@@ -9,7 +9,7 @@ export type messageType = "standup" | "challenge" | "feedback" | "reply" | "mess
  */
 export function isMilestoneStreak(streak: number) {
     // current conditions: streak is 5,7,14,25 or multiple of 50
-    return [5,7,14,25].includes(streak) || streak % 50 === 0;
+    return ([5,7,14,25].includes(streak) || streak % 50 === 0) && streak > 0;
 }
 
 /**
