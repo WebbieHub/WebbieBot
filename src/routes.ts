@@ -20,9 +20,20 @@ router.get('/user', async (req: Request, res: Response, next: NextFunction) => {
     }
 })
 
-router.post("/user/:userId", async (req: Request, res: Response, next: NextFunction) => {
+router.post('/auth', async (req, res, next) => {
     try {
-        const user = await userService.createUser(req.params.userId);
+        const { token } = req.body;
+        res.send({ auth: process.env.AUTH_TOKEN && process.env.AUTH_TOKEN === token });
+    } catch(e) {
+        console.error(e);
+        res.status(500).send("Something went wrong");
+    }
+})
+
+router.post("/user", async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { userId, tag } = req.body
+        const user = await userService.createUser(userId, tag);
         res.send({ user });
     } catch (e) {
         console.error(e);

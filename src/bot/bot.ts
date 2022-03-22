@@ -41,7 +41,7 @@ client.once('ready', () => {
         const userId = interaction.author.id;
         let response = await axios.get(`${host}/api/user/${userId}`);
         if (!response.data.user) {
-            response = await axios.post(`${host}/api/user/${userId}`);
+            response = await axios.post(`${host}/api/user`, {userId, tag: interaction.author.tag});
             interaction.channel.send(`<@${userId}> I've made an entry for you in the DB!`);
         }
         
