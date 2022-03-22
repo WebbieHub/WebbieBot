@@ -4,6 +4,7 @@ import { getLevel } from "../bot/xp";
 // user actions
 export interface User {
     userId: string,
+    tag: string,
     xp: number,
     level: number,
     streak: number,
@@ -22,9 +23,10 @@ export default class UserService {
         this.userCol = client.db("WebbieBot").collection("Users");
     }
 
-    async createUser(userId: string) {
+    async createUser(userId: string, tag: string) {
         const user: User = {
             userId,
+            tag,
             xp: 0,
             level: 0,
             streak: 0,
