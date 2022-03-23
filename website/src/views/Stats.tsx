@@ -14,7 +14,9 @@ import {
     Progress,
     ChakraProvider,
     Divider,
-    Badge
+    Badge,
+    InputLeftAddon,
+    Flex
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { getUser } from '../actions/actions'
@@ -65,11 +67,17 @@ export default function Stats() {
             </Text>
         </Box>
 
-        <HStack>
-        <InputGroup w={'fit-content'}>
+        <HStack
+            p={1}
+        >
+        <InputGroup
+            w={'fit-content'}
+            alignItems={'center'}
+        >
+            <InputLeftAddon children='@' />
             <Input
                 focusBorderColor='purple.800'
-                placeholder="@Username#1234" w="auto" value={tag} onChange={(e) => setTag(e.target.value)} />
+                placeholder="Username#1234" value={tag} onChange={(e) => setTag(e.target.value)} />
             <InputRightElement children={
                 <Popover>
                     <PopoverTrigger>
@@ -81,7 +89,7 @@ export default function Stats() {
                     </PopoverTrigger>
                     <PopoverContent>
                         <PopoverBody fontSize={'xs'}>
-                            Find this on the bottom left corner of discord. Be sure to include your 
+                            Find this on the bottom left corner of discord. Be sure to include your
                             name and the 4 digits after the #</PopoverBody>
                     </PopoverContent>
                 </Popover>
@@ -91,7 +99,7 @@ export default function Stats() {
         </HStack>
 
         {userId && (<Box bg={'gray.50'}
-        my={20} w={'50%'} p={5} borderRadius={'md'}
+        my={20} w={'60%'} p={5} borderRadius={'md'}
         >
             <Heading>{tag}</Heading>
             <Box my={5}>
@@ -101,7 +109,7 @@ export default function Stats() {
                     fontWeight={'medium'}
                     mb={2}
                 >Level {level}</Text>
-                <Progress value={80} borderRadius={'md'}
+                <Progress value={(xp/(xpToNext + xp))*100} borderRadius={'md'}
                           w={'90%'}
                 />
                 <Text
@@ -110,7 +118,7 @@ export default function Stats() {
                     w={'90%'}
                     color={'purple.800'}
                     fontWeight={'medium'}
-                    mt={1}
+                    mt={2}
                     mb={4}
                 >{xp}/{xpToNext + xp} XP</Text>
                 <Divider mb={4}/>
@@ -120,20 +128,34 @@ export default function Stats() {
                     fontWeight={'medium'}
                 >Streak</Text>
                     <Badge
-                    bg={'#e0dde7'}
+                    bg={'gray.200'}
                     >#📆-daily-standup</Badge>
 
                 </HStack>
 
-                <Text
-                    fontSize={'16px'}
-                    color={'purple.800'}
-                >{streak} days</Text>
+                <HStack mt={4}>
+                    <Flex
+                        bg={'gray.200'}
+                        w={'2.5rem'}
+                        h={'2.5rem'}
+                        align={'center'}
+                        justify={'center'}
+                        borderRadius={'50%'}
+                    >
+                        <Text
+                            fontSize={'18px'}
+                            fontWeight={'medium'}
+                        >{streak}</Text>
+                    </Flex>
+                    <Text
+                        fontSize={'18px'}
+                    >day{+ streak === 1? '': 's'}</Text>
+
+                </HStack>
 
             </Box>
 
         </Box>)}
-        {/*<UserTable userId={userId} tag={tag} xp={xp} level={level} streak={streak} />*/}
     </Box>
       </ChakraProvider>
   )
