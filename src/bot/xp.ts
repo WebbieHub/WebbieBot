@@ -1,6 +1,6 @@
-import { Interaction, Message, MessageInteraction } from "discord.js";
+import { Message } from "discord.js";
 import { User } from "../db/user"
-import { getMessageType, messageType } from "../misc";
+import { getMessageType } from "../misc";
 
 export const xpMap = {
     standup: 15, // first message of calendar day in daily standup channel
@@ -38,7 +38,7 @@ export async function getMessageScore(interaction: Message<boolean>) {
  * @param xp a user's total xp
  */
 export function getLevel(xp: number) {
-    return xp === 0 ? 1 : Math.ceil(Math.sqrt(xp) / 4);
+    return xp <= 0 ? 1 : Math.ceil(Math.sqrt(xp) / 4);
 }
 
 /**
