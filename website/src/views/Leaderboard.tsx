@@ -3,23 +3,25 @@ import {
     Table,
     Thead,
     Tbody,
-    Tfoot,
+    Text,
     Tr,
     Th,
     Td,
-    TableCaption,
     Divider,
-    Stat,
-    StatGroup,
-    StatLabel,
-    StatNumber,
-    StatHelpText
+    Image, HStack, Heading, VStack, Flex
 } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 import { getAllUsers } from '../actions/actions'
+// @ts-ignore
+import gold from "../img/gold.png"
+// @ts-ignore
+import silver from '../img/silver.png'
+// @ts-ignore
+import bronze from '../img/bronze.png'
 
 export default function Leaderboard() {
     const [users, setUsers] = useState<any[]>([])
+    const icons = [gold, silver, bronze]
 
     useEffect(() => {
         getAllUsers()
@@ -37,15 +39,35 @@ export default function Leaderboard() {
 
     return (
         <Box>
-            <StatGroup>
+            <HStack
+                spacing={12}
+                my={10}
+                bg={'gray.50'}
+                p={5} borderRadius={'2xl'}
+            >
                 {users.map((user, index) => (
-                    index <= 2 ? <Stat>
-                        <StatLabel>{index + 1}</StatLabel>
-                        <StatNumber>{user.tag}</StatNumber>
-                        <StatHelpText>{user.level}</StatHelpText>
-                    </Stat> : <></>
+                    index <= 2 ? <VStack>
+                            <Image
+                                src={icons[index]}
+                            />
+                        <Heading
+                            fontWeight={'medium'}
+                        size={'lg'}>{user.tag}</Heading>
+                        <Flex
+                            bg={'gray.200'}
+                            w={'2rem'}
+                            h={'2rem'}
+                            align={'center'}
+                            justify={'center'}
+                            borderRadius={'50%'}
+                        >
+                        <Text fontSize={'18px'}
+                        >{user.level}</Text>
+                        </Flex>
+
+                    </VStack> : <></>
                 ))}
-            </StatGroup>
+            </HStack>
             <Divider />
             <Table variant="simple">
                 <Thead>
@@ -63,6 +85,6 @@ export default function Leaderboard() {
                     </Tr>
                 ))}</Tbody>
             </Table>
-        </Box> 
+        </Box>
     )
 }
