@@ -46,7 +46,7 @@ client.once('ready', () => {
         }
         
         // add xp based on user multiplier and message type
-        const xp = parseFloat((await getMessageScore(interaction) * getUserMultiplier(response.data.user)).toFixed(2));
+        const xp = parseInt((await getMessageScore(interaction) * getUserMultiplier(response.data.user)).toFixed(2));
         const res = await axios.patch(`${host}/api/user/${userId}/${xp}`);
         if (res.data.levelUp === true) {
             interaction.channel.send(`:star2: **LEVEL UP** :star2: \n <@${userId}> has reached level ${getLevel(response.data.user.xp + xp)}`)

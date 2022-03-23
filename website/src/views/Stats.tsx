@@ -1,18 +1,9 @@
 import {
     Box,
     Input,
-    Table,
-    Thead,
-    Tbody,
-    Tfoot,
-    Tr,
-    Th,
-    Td,
-    TableCaption,
     Button,
     Heading,
     Text,
-    VStack,
     InputGroup,
     InputRightElement,
     Popover,
@@ -27,8 +18,7 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { getUser } from '../actions/actions'
-import UserTable from "../components/UserTable";
-import {CheckIcon, QuestionOutlineIcon} from "@chakra-ui/icons";
+import {QuestionOutlineIcon} from "@chakra-ui/icons";
 import theme from '../theme'
 
 export default function Stats() {
@@ -37,16 +27,22 @@ export default function Stats() {
   const [xp, setXp] = useState(0);
   const [level, setLevel] = useState(0);
   const [streak, setStreak] = useState(0);
+  const [xpToNext, setXpToNext] = useState(0);
 
   const updateUser = () => {
-    if (userId) {
-      getUser(userId)
+    if (tag) {
+      getUser(tag)
         .then(res => {
+            console.log('?', res)
             if (res.data && res.data.user) {
-                setXp(res.data.user.xp)
-                setLevel(res.data.user.level)
-                setStreak(res.data.user.streak)
-                setTag(res.data.user.tag)
+                setXp(res.data.user.xp);
+                setLevel(res.data.user.level);
+                setStreak(res.data.user.streak);
+                setTag(res.data.user.tag);
+                setUserId(res.data.user.userId);
+            }
+            if (res.data && res.data.xpToNext) {
+                setXpToNext(res.data.xpToNext);
             }
         })
     }
@@ -65,7 +61,7 @@ export default function Stats() {
                 Stats
             </Heading>
             <Text>
-                Type your User ID below to check your stats!
+                Type your Username below to check your stats!
             </Text>
         </Box>
 
@@ -73,7 +69,7 @@ export default function Stats() {
         <InputGroup w={'fit-content'}>
             <Input
                 focusBorderColor='purple.800'
-                placeholder="User ID" w="auto" value={userId} onChange={(e) => setUserId(e.target.value)} />
+                placeholder="@Username#1234" w="auto" value={tag} onChange={(e) => setTag(e.target.value)} />
             <InputRightElement children={
                 <Popover>
                     <PopoverTrigger>
@@ -85,8 +81,8 @@ export default function Stats() {
                     </PopoverTrigger>
                     <PopoverContent>
                         <PopoverBody fontSize={'xs'}>
-                            Make sure you have Developer Mode turned on in Discord, then right click on your username
-                        in a chat and click 'Copy ID'</PopoverBody>
+                            Find this on the bottom left corner of discord. Be sure to include your 
+                            name and the 4 digits after the #</PopoverBody>
                     </PopoverContent>
                 </Popover>
                 } />
@@ -116,7 +112,7 @@ export default function Stats() {
                     fontWeight={'medium'}
                     mt={1}
                     mb={4}
-                >{xp}/1000 XP</Text>
+                >{xp}/{xpToNext + xp} XP</Text>
                 <Divider mb={4}/>
                 <HStack><Text
                     fontSize={'2xl'}

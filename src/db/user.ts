@@ -28,7 +28,7 @@ export default class UserService {
             userId,
             tag,
             xp: 0,
-            level: 0,
+            level: 1,
             streak: 0,
             participated: [],
             won: [],
@@ -75,5 +75,9 @@ export default class UserService {
 
     async getAll() {
         return await this.userCol.find().toArray()
+    }
+
+    async getByTag(tag: string) {
+        return await this.userCol.findOne({ tag: tag })
     }
 }

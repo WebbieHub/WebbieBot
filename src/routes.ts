@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response, Router } from "express";
+import { getXPToNextLevel } from "./bot/xp";
 import client from "./db/connect";
 import UserService, { User } from "./db/user";
 
@@ -14,6 +15,19 @@ router.get('/user', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const users = await userService.getAll();
         res.send({ users });
+    } catch(e) {
+        console.error(e);
+        res.status(500).send("Something went wrong");
+    }
+})
+
+// get user stats by tag
+router.post('/user/stats', async (req, res, next) => {
+    try {
+        const { tag } = req.body
+        const user = await userService.getByTag(tag);
+        const xpToNext = getXPToNextLevel(user?.xp || 0, user?.level || 0);
+        res.send({ user, xpToNext });
     } catch(e) {
         console.error(e);
         res.status(500).send("Something went wrong");

@@ -38,5 +38,17 @@ export async function getMessageScore(interaction: Message<boolean>) {
  * @param xp a user's total xp
  */
 export function getLevel(xp: number) {
-    return xp === 0 ? 0 : Math.ceil(Math.log(xp) / 2);
+    return xp === 0 ? 1 : Math.ceil(Math.sqrt(xp) / 4);
+}
+
+/**
+ * Get xp needed until next level
+ * @param xp The user's current xp
+ * @param currLevel The user's current level
+ * @returns XP amount needed to level up
+ */
+export function getXPToNextLevel(xp: number, currLevel: number) {
+    // level = ceil[log(xp)/2], xp = e^2(level) UNSURE ABOUT CORRECTNESS
+    // return exp needed for level currLevel+1 subtract current xp
+    return currLevel === 0 ? 1 : Math.floor(Math.ceil(16 * (currLevel)**2)) - xp
 }
