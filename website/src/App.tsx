@@ -8,6 +8,7 @@ import Nav from "./components/Nav"
 import About from "./views/About"
 import Stats from "./views/Stats"
 import Admin from "./views/Admin"
+import Leaderboard from "./views/Leaderboard"
 
 export const App = () => (
   <ChakraProvider theme={theme}>
@@ -16,6 +17,7 @@ export const App = () => (
       <Routes>
         <Route path="/" element={<About />} />
         <Route path="/stats" element={<Stats />} />
+        <Route path="/leaderboard" element={<Leaderboard />} />
         <Route path="/admin" element={<Admin />} />
       </Routes>
     </Box>

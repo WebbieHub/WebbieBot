@@ -2,6 +2,7 @@ import { Box, theme, Button, Flex, IconButton, Icon } from '@chakra-ui/react'
 import { AtSignIcon, InfoIcon, LockIcon } from '@chakra-ui/icons'
 import { ColorModeSwitcher } from '../ColorModeSwitcher'
 import { AiFillGithub } from 'react-icons/ai'
+import { MdLeaderboard } from 'react-icons/md'
 import { Link } from 'react-router-dom'
 
 export default function Nav() {
@@ -17,7 +18,7 @@ export default function Nav() {
             <Box>
                 <Link to="/"><Button _light={{ textColor: "purple.800" }} leftIcon={<InfoIcon/>} variant="solid" as="a">About</Button></Link>
                 <Link to="/stats"><Button _light={{ textColor: "purple.800" }} leftIcon={<AtSignIcon/>} variant="solid" as="a" m="2">Stats</Button></Link>
-                <Link to="/admin"><Button _light={{ textColor: "purple.800" }} leftIcon={<LockIcon/>} variant="solid" as="a">Admin</Button></Link>
+                <Link to="/leaderboard"><Button _light={{ textColor: "purple.800" }} leftIcon={<Icon as={MdLeaderboard} w={6} h={6} />} variant="solid" as="a">Leaderboard</Button></Link>
             </Box>
             <Box>
                 <ColorModeSwitcher justifySelf="flex-end" />
