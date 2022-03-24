@@ -40,7 +40,6 @@ router.post('/user/message', async (req, res, next) => {
     try {
         const { userId, tag, type } = req.body;
         const baseXp = xpMap[type as messageType];
-        console.log('starting with baseXp', baseXp, 'for msg type', type)
         const isStandup = type === "standup";
         const [user, levelUp] = await userService.handleMessage(userId, tag, baseXp, isStandup);
         res.send({ user, levelUp });

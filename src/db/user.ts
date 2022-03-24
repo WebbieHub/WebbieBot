@@ -41,7 +41,6 @@ export default class UserService {
         // parse float with toFixed ensures clean, 2 decimal place xp values
         const mult = getUserMultiplier(user)
         const totalXp = parseFloat((baseXp * mult).toFixed(2));
-        console.log("multiplying by", mult, 'to get', totalXp)
         if (!user) {
             const newUser = {
                 userId,
