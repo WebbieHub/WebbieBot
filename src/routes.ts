@@ -1,7 +1,8 @@
 import { NextFunction, Request, Response, Router } from "express";
-import { getXPToNextLevel } from "./bot/xp";
+import { getMessageScore, getXPToNextLevel, xpMap } from "./bot/xp";
 import client from "./db/connect";
 import UserService, { User } from "./db/user";
+import { messageType } from "./misc";
 
 // create instances of services and router
 const router = Router();
@@ -34,22 +35,26 @@ router.post('/user/stats', async (req, res, next) => {
     }
 })
 
-router.post('/auth', async (req, res, next) => {
+// handle message
+router.post('/user/message', async (req, res, next) => {
     try {
-        const { token } = req.body;
-        res.send({ auth: process.env.AUTH_TOKEN && process.env.AUTH_TOKEN === token });
+        const { userId, tag, type } = req.body;
+        const baseXp = xpMap[type as messageType];
+        console.log('starting with baseXp', baseXp, 'for msg type', type)
+        const isStandup = type === "standup";
+        const [user, levelUp] = await userService.handleMessage(userId, tag, baseXp, isStandup);
+        res.send({ user, levelUp });
     } catch(e) {
         console.error(e);
         res.status(500).send("Something went wrong");
     }
 })
 
-router.post("/user", async (req: Request, res: Response, next: NextFunction) => {
+router.post('/auth', async (req, res, next) => {
     try {
-        const { userId, tag } = req.body
-        const user = await userService.createUser(userId, tag);
-        res.send({ user });
-    } catch (e) {
+        const { token } = req.body;
+        res.send({ auth: process.env.AUTH_TOKEN && process.env.AUTH_TOKEN === token });
+    } catch(e) {
         console.error(e);
         res.status(500).send("Something went wrong");
     }
@@ -64,37 +69,5 @@ router.get("/user/:userId", async (req: Request, res: Response, next: NextFuncti
         res.status(500).send("Something went wrong");
     }
 })
-
-
-router.patch("/user/:userId/standup", async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const streak = await userService.didStandup(req.params.userId);
-        res.send({ streak });
-    } catch (e) {
-        console.error(e);
-        res.status(500).send("Something went wrong");
-    }
-})
-
-router.get("/user/:userId/checkResetStreak", async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        await userService.checkResetStreak(req.params.userId);
-        res.send({ message: "checked" });
-    } catch (e) {
-        console.error(e);
-        res.status(500).send("Something went wrong");
-    }
-})
-
-router.patch("/user/:userId/:xp", async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const levelUp = await userService.addXp(req.params.userId, parseFloat(req.params.xp));
-        res.send({ levelUp });
-    } catch (e) {
-        console.error(e);
-        res.status(500).send("Something went wrong");
-    }
-})
-
 
 export default router;

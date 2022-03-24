@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "path";
 import { Client, Collection, Intents } from 'discord.js';
-import { getLevel, getMessageScore, getUserMultiplier } from "./xp";
+import { getLevel } from "./xp";
 import axios from "axios";
 import { getMessageType, isMilestoneStreak } from "../misc";
 const host = process.env.HOST || "http://localhost:5000"
@@ -38,34 +38,26 @@ client.once('ready', () => {
         if (interaction.content === "deez") {
             interaction.channel.send("nuts")
         }
+        // get xp for message
+        const type = await getMessageType(interaction);
         const userId = interaction.author.id;
-        let response = await axios.get(`${host}/api/user/${userId}`);
-        if (!response.data.user) {
-            response = await axios.post(`${host}/api/user`, {userId, tag: interaction.author.tag});
-            interaction.channel.send(`<@${userId}> I've made an entry for you in the DB!`);
+        // TODO not complex but awful readability maybe worth expanding
+        let { data: { user, levelUp } } = await axios.post(`${host}/api/user/message`, { userId, tag: interaction.author.tag, type });
+        if (!user) {
+            console.error('a terrible error has occurred')
+            return
         }
         
-        // add xp based on user multiplier and message type
-        const xp = parseInt((await getMessageScore(interaction) * getUserMultiplier(response.data.user)).toFixed(2));
-        const res = await axios.patch(`${host}/api/user/${userId}/${xp}`);
-        if (res.data.levelUp === true) {
-            interaction.channel.send(`:star2: **LEVEL UP** :star2: \n <@${userId}> has reached level ${getLevel(response.data.user.xp + xp)}`)
+        if (levelUp) {
+            interaction.channel.send(`:star2: **LEVEL UP** :star2: \n <@${userId}> has reached level ${user.level}`)
         }
-        // increase streak if appropriate
-        const type = await getMessageType(interaction);
+        
         if (type === "standup") {
-            // reset if needed
-            await axios.get(`${host}/api/user/${userId}/checkResetStreak`);
-            // add to streak and check for milestone
-            interaction.reply("acknowledging this as a standup")
-            const result = await axios.patch(`${host}/api/user/${userId}/standup`);
-            if (isMilestoneStreak(result.data.streak + 1)) {
-                interaction.channel.send(`:fire: **Congrats** to <@${userId}> for reaching a **${result.data.streak + 1} day** streak :fire:`);
-            } else {
+            if (isMilestoneStreak(user.streak)) {
+                interaction.channel.send(`:fire: **Congrats** to <@${userId}> for reaching a **${user.streak} day** streak :fire:`);
+            } else if (user.streak == 0) {
                 interaction.channel.send(`:fire: <@${userId}> has started a new streak. **Keep it up!** :fire:`)
             }
-        } else if (interaction.channelId === process.env.STANDUP_ID) {
-            interaction.reply("This message is in the standup channel, but is not your first one today..")
         }
     })
 })

@@ -16,7 +16,10 @@ export const xpMap = {
  * Get the xp multiplier for a given user
  * @param user user object to get multiplier for
  */
-export function getUserMultiplier(user: User) {
+export function getUserMultiplier(user: User | null) {
+    if (!user) {
+        return 1;
+    }
     // multiplier is determined by streak length, events participated and events won
     const streakMultiplier = user.streak / 100;
     const participateMultiplier = user.participated.length / 8;
