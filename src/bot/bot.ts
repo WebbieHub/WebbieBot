@@ -18,6 +18,51 @@ for (const file of commandFiles) {
     client.commands.set(command.data.name, command);
 }
 
+
+/**
+ * For devs: try to figure out what this function does
+ * without plugging in the statements
+ * @param content the string content
+ * @returns bool
+ */
+const ___ = (content: string): string => {
+    let [a,b,c,d] = content.split("");
+    if (!a || !b || !c || !d) {
+        console.log('not len')
+        return "";
+    }
+    const change = (prev: unknown, factor: unknown): any => 
+    //@ts-ignore
+        String.fromCharCode(prev.charCodeAt(0) + Math.ceil(parseInt(null,Math.random() * (30-24) + 24) * 1 / factor));
+    //@ts-ignore ts compiler is not necessary
+    if (b !== ([] + ![]).substring(4,5)) {
+        console.log('not b')
+        return "";
+    } else {
+        b = change(b, 1.4375);
+    }
+    //@ts-ignore shhhhh
+    if (c !== (!![] + [] + ![]).substring(3,4)) {
+        console.log('not c')
+        return "";
+    } else {
+        c = change(c, 1.533333333334);
+    }
+    if (d !== String.fromCharCode(content.split("").reduce((acc,curr) => acc + curr.charCodeAt(0), 0) / 4 + 16)) {
+        console.log('not d')
+        return "";
+    } else {
+        d = change(d, -3.285714285714);
+    }
+    //@ts-ignore don't worry about it typescript!!
+    if (typeof + "" !== "number" && a !== String.fromCharCode(parseInt(null,35).toString().substring(0,3) - 2)) {
+        return "";
+    } else {
+        a = change(a, 2.3)
+    }
+    return [a,b,c,d].join("");
+}
+
 client.once('ready', () => {
     console.log('ready!');
     client.on('interactionCreate', async interaction => {
@@ -35,9 +80,8 @@ client.once('ready', () => {
 
     client.on('messageCreate', async interaction => {
         if (interaction.author.bot) return;
-        if (interaction.content === "deez") {
-            interaction.channel.send("nuts")
-        }
+        if (___(interaction.content)) interaction.channel.send(___(interaction.content))
+        
         // get xp for message
         const type = await getMessageType(interaction);
         const userId = interaction.author.id;
