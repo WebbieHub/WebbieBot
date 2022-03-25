@@ -82,7 +82,16 @@ client.once('ready', () => {
         const type = await getMessageType(interaction);
         const userId = interaction.author.id;
         // TODO not complex but awful readability maybe worth expanding
-        let { data: { user, levelUp } } = await axios.post(`${host}/api/user/message`, { userId, tag: interaction.author.tag, type });
+        let user;
+        let levelUp;
+        try {
+            let { data } = await axios.post(`${host}/api/user/message`, { userId, tag: interaction.author.tag, type });
+            user = data.user;
+            levelUp = data.levelUp;
+        } catch (e) {
+            console.log('error occurred', e)
+            return;
+        }
         if (!user) {
             console.error('a terrible error has occurred')
             return
