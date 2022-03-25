@@ -95,8 +95,6 @@ client.once('ready', () => {
         if (type === "standup") {
             if (isMilestoneStreak(user.streak)) {
                 interaction.channel.send(`:fire: **Congrats** to <@${userId}> for reaching a **${user.streak} day** streak :fire:`);
-            } else if (user.streak == 0) {
-                interaction.channel.send(`:fire: <@${userId}> has started a new streak. **Keep it up!** :fire:`)
             }
         }
     })
