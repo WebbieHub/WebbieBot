@@ -8,7 +8,7 @@ import {
     Th,
     Td,
     Divider,
-    Image, HStack, Heading, VStack, Flex
+    Image, HStack, Heading, VStack, Flex, theme, color
 } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 import { getAllUsers } from '../actions/actions'
@@ -18,6 +18,7 @@ import gold from "../img/gold.png"
 import silver from '../img/silver.png'
 // @ts-ignore
 import bronze from '../img/bronze.png'
+import { FaGratipay } from 'react-icons/fa'
 
 export default function Leaderboard() {
     const [users, setUsers] = useState<any[]>([])
@@ -43,7 +44,9 @@ export default function Leaderboard() {
                 spacing={12}
                 my={10}
                 bg={'gray.50'}
+                _dark={{bg: "gray.900"}}
                 p={5} borderRadius={'2xl'}
+                justifyContent={'center'}
             >
                 {users.map((user, index) => (
                     index <= 2 ? <VStack>
@@ -54,6 +57,7 @@ export default function Leaderboard() {
                             fontWeight={'medium'}
                         size={'lg'}>{user.tag}</Heading>
                         <Flex
+                            _dark={{bg: "gray.800"}}
                             bg={'gray.200'}
                             w={'2rem'}
                             h={'2rem'}
