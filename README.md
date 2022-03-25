@@ -1,6 +1,7 @@
 # WebbieBot
 Discord Bot for the WebbieHub Community
 
+Check it out here: [webbie-bot.herokuapp.com](https://webbie-bot.herokuapp.com/)
 ## Dev Instructions
 1. clone the repo
 1. run `yarn install` in the project directory
