@@ -1,12 +1,14 @@
-import { Box, theme, Button, Flex, IconButton, Icon } from '@chakra-ui/react'
+import { Box, Button, Flex, IconButton, Icon, ChakraProvider } from '@chakra-ui/react'
 import { AtSignIcon, InfoIcon, LockIcon } from '@chakra-ui/icons'
 import { ColorModeSwitcher } from '../ColorModeSwitcher'
 import { AiFillGithub } from 'react-icons/ai'
 import { MdHome, MdLeaderboard } from 'react-icons/md'
 import { Link } from 'react-router-dom'
+import theme from "../theme"
 
 export default function Nav() {
   return (
+      <ChakraProvider theme={theme}>
       <Box
         w={"full"}
         backgroundColor={theme.colors.purple[800]}
@@ -21,7 +23,11 @@ export default function Nav() {
                 <Link to="/leaderboard"><Button _light={{ textColor: "purple.800" }} leftIcon={<Icon as={MdLeaderboard} w={6} h={6} />} variant="solid" as="a">Leaderboard</Button></Link>
             </Box>
             <Box>
-                <ColorModeSwitcher justifySelf="flex-end" />
+                <ColorModeSwitcher justifySelf="flex-end"
+                                   _light={{
+                                       _hover: {color: "purple.800"}
+                                   }}
+                />
                 <IconButton
                     size="md"
                     fontSize="lg"
@@ -32,9 +38,13 @@ export default function Nav() {
                     aria-label={`See the Source Code`}
                     as="a"
                     href="https://github.com/WebbieHub/WebbieBot"
+                    _light={{
+                        _hover: {color: "purple.800"}
+                    }}
                 />
             </Box>
           </Flex>
       </Box>
+      </ChakraProvider>
   )
 }

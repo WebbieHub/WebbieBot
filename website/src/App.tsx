@@ -1,6 +1,5 @@
 import {
   ChakraProvider,
-  theme,
   Box,
 } from "@chakra-ui/react"
 import { Routes, Route } from 'react-router-dom'
@@ -9,6 +8,7 @@ import Home from "./views/Home"
 import Stats from "./views/Stats"
 import Admin from "./views/Admin"
 import Leaderboard from "./views/Leaderboard"
+import theme from "./theme"
 
 export const App = () => (
   <ChakraProvider theme={theme}>
