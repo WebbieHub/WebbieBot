@@ -51,7 +51,6 @@ export default function Stats() {
   }
 
   return (
-      <ChakraProvider theme={theme}>
     <Box w="container.lg">
         <Box
             w={'80%'}
@@ -74,7 +73,9 @@ export default function Stats() {
             w={'fit-content'}
             alignItems={'center'}
         >
-            <InputLeftAddon children='@' />
+            <InputLeftAddon children='@'
+            _dark={{background: 'gray.700'}}
+            />
             <Input
                 focusBorderColor='purple.800'
                 placeholder="Username#1234" value={tag} onChange={(e) => setTag(e.target.value)} />
@@ -88,14 +89,18 @@ export default function Stats() {
                         </Button>
                     </PopoverTrigger>
                     <PopoverContent>
-                        <PopoverBody fontSize={'xs'}>
+                        <PopoverBody fontSize={'xs'}
+                                     _dark={{color: 'gray.700'}}
+                        >
                             Find this on the bottom left corner of discord. Be sure to include your
                             name and the 4 digits after the #</PopoverBody>
                     </PopoverContent>
                 </Popover>
                 } />
         </InputGroup>
-            <Button onClick={updateUser}>Load Stats</Button>
+            <Button onClick={updateUser}
+                    _dark={{background: 'gray.700'}}
+            >Load Stats</Button>
         </HStack>
 
         {userId && (<Box bg={'gray.50'}
@@ -157,6 +162,5 @@ export default function Stats() {
 
         </Box>)}
     </Box>
-      </ChakraProvider>
   )
 }
